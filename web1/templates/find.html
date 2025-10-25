@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Your Translator - Translink</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0F5C95;
+            --primary-dark: #094066;
+            --accent-color: #FFC107;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #6c757d;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        .page-title {
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 30px 0 20px;
+        }
+
+        .page-subtitle {
+            color: var(--dark-gray);
+            margin-bottom: 30px;
+        }
+
+        .filter-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .filter-title {
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--primary-dark);
+            font-size: 18px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 10px 15px;
+            border: 1px solid var(--medium-gray);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(15, 92, 149, 0.2);
+        }
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .translator-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .translator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .translator-name {
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+
+        .translator-exp {
+            color: var(--dark-gray);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .rating {
+            color: #FFC107;
+            margin-bottom: 15px;
+        }
+
+        .rating-count {
+            color: var(--dark-gray);
+            font-size: 14px;
+        }
+
+        .languages {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .language-tag {
+            background-color: rgba(15, 92, 149, 0.1);
+            color: var(--primary-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .translator-description {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .translator-price {
+            font-weight: 700;
+            font-size: 22px;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .price-label {
+            color: var(--dark-gray);
+            font-size: 13px;
+        }
+
+        .btn-view-profile {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-view-profile:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(15, 92, 149, 0.3);
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-count {
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+
+        .sort-dropdown {
+            display: flex;
+            align-items: center;
+        }
+
+        .sort-label {
+            margin-right: 10px;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: var(--medium-gray);
+            margin: 30px 0;
+        }
+
+        .availability-badge {
+            background-color: #28a745;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        .availability-offline {
+            background-color: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .sort-dropdown {
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">Translink</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Find Translators</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Become a Translator</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Resources</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Page Header -->
+        <div class="row">
+            <div class="col-12">
+                <h1 class="page-title">Find Your Translator</h1>
+                <p class="page-subtitle">Browse our network of professional translators</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Filters Sidebar -->
+            <div class="col-lg-4">
+                <div class="filter-section">
+                    <h5 class="filter-title">Filters</h5>
+
+                    <div class="mb-4">
+                        <label class="form-label">Search</label>
+                        <input type="text" class="form-control" placeholder="Name or language...">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Price Range ($/hour)</label>
+                        <div class="d-flex align-items-center">
+                            <span class="me-2">$0</span>
+                            <input type="range" class="form-range flex-grow-1" min="0" max="100" value="60">
+                            <span class="ms-2">$100</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Minimum Rating</label>
+                        <select class="form-select">
+                            <option>Any Rating</option>
+                            <option>4.5+ Stars</option>
+                            <option>4.0+ Stars</option>
+                            <option>3.5+ Stars</option>
+                            <option>3.0+ Stars</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Availability</label>
+                        <select class="form-select">
+                            <option>All Translators</option>
+                            <option>Available Now</option>
+                            <option>Available This Week</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Languages</label>
+                        <select class="form-select">
+                            <option>All Languages</option>
+                            <option>French</option>
+                            <option>Spanish</option>
+                            <option>German</option>
+                            <option>Japanese</option>
+                            <option>Arabic</option>
+                            <option>Portuguese</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary w-100">Apply Filters</button>
+                </div>
+            </div>
+
+            <!-- Translator Results -->
+            <div class="col-lg-8">
+                <div class="results-header">
+                    <div class="results-count">5 translators found</div>
+                    <div class="sort-dropdown">
+                        <span class="sort-label">Sort by:</span>
+                        <select class="form-select form-select-sm" style="width: auto;">
+                            <option>Recommended</option>
+                            <option>Highest Rated</option>
+                            <option>Price: Low to High</option>
+                            <option>Price: High to Low</option>
+                            <option>Most Experience</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Translator Cards -->
+                <div class="translator-card">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="translator-name">Jen Dupont <span class="availability-badge">Available</span></div>
+                            <div class="translator-exp">8 years exp.</div>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="rating-count">4.9 (93)</span>
+                            </div>
+                            <div class="languages">
+                                <span class="language-tag">French</span>
+                                <span class="language-tag">English</span>
+                                <span class="language-tag">Spanish</span>
+                            </div>
+                            <div class="translator-description">
+                                Experienced French translator specialized in literary works and technical documents. Fluent in multiple languages with a focus on maintaining cultural context.
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="translator-price">$55.00</div>
+                            <div class="price-label">per hour</div>
+                            <button class="btn-view-profile mt-3">View Profile</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="translator-card">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="translator-name">Yuki Tanaka <span class="availability-badge">Available</span></div>
+                            <div class="translator-exp">6 years exp.</div>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span class="rating-count">4.6 (72)</span>
+                            </div>
+                            <div class="languages">
+                                <span class="language-tag">Japanese</span>
+                                <span class="language-tag">English</span>
+                            </div>
+                            <div class="translator-description">
+                                Japanese to English translator with expertise in business documents and technical manuals. Fast turnaround times with meticulous attention to detail.
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="translator-price">$48.00</div>
+                            <div class="price-label">per hour</div>
+                            <button class="btn-view-profile mt-3">View Profile</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="translator-card">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="translator-name">Maria Garcia <span class="availability-badge availability-offline">Offline</span></div>
+                            <div class="translator-exp">10 years exp.</div>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="rating-count">4.8 (127)</span>
+                            </div>
+                            <div class="languages">
+                                <span class="language-tag">Spanish</span>
+                                <span class="language-tag">English</span>
+                                <span class="language-tag">Portuguese</span>
+                            </div>
+                            <div class="translator-description">
+                                Native Spanish speaker with 10-years of professional translation experience in legal, medical, and business documents. Certified translator with quick turnaround.
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="translator-price">$45.00</div>
+                            <div class="price-label">per hour</div>
+                            <button class="btn-view-profile mt-3">View Profile</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="translator-card">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="translator-name">Ahmed Hassan <span class="availability-badge">Available</span></div>
+                            <div class="translator-exp">7 years exp.</div>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span class="rating-count">4.5 (88)</span>
+                            </div>
+                            <div class="languages">
+                                <span class="language-tag">Arabic</span>
+                                <span class="language-tag">English</span>
+                                <span class="language-tag">French</span>
+                            </div>
+                            <div class="translator-description">
+                                Arabic translator with specialization in legal and governmental documents. Provides certified translations with quick turnaround times and excellent quality.
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="translator-price">$52.00</div>
+                            <div class="price-label">per hour</div>
+                            <button class="btn-view-profile mt-3">View Profile</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="translator-card">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="translator-name">Hans Müller <span class="availability-badge">Available</span></div>
+                            <div class="translator-exp">12 years exp.</div>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="rating-count">4.7 (156)</span>
+                            </div>
+                            <div class="languages">
+                                <span class="language-tag">German</span>
+                                <span class="language-tag">English</span>
+                            </div>
+                            <div class="translator-description">
+                                German translator with expertise in financial and marketing documents. Native speaker with extensive experience in corporate communications and technical translations.
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="translator-price">$60.00</div>
+                            <div class="price-label">per hour</div>
+                            <button class="btn-view-profile mt-3">View Profile</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
