@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Find Your Translator - Translink</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <style>
+            :root {
+                --primary-color: #0F5C95;
+                --primary-dark: #094066;
+                --accent-color: #FFC107;
+                --light-gray: #f8f9fa;
+                --medium-gray: #e9ecef;
+                --dark-gray: #6c757d;
+            }
+
+            body {
+                background-color: #f5f7fa;
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                color: #333;
+            }
+
+            .navbar {
+                background-color: white;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .navbar-brand {
+                font-weight: 800;
+                color: var(--primary-color);
+                font-size: 24px;
+            }
+
+            .page-title {
+                font-weight: 700;
+                color: var(--primary-dark);
+                margin: 30px 0 20px;
+            }
+
+            .page-subtitle {
+                color: var(--dark-gray);
+                margin-bottom: 30px;
+            }
+
+            .filter-section {
+                background-color: white;
+                border-radius: 10px;
+                padding: 25px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+                margin-bottom: 30px;
+            }
+
+            .filter-title {
+                font-weight: 600;
+                margin-bottom: 20px;
+                color: var(--primary-dark);
+                font-size: 18px;
+            }
+
+            .form-control,
+            .form-select {
+                border-radius: 8px;
+                padding: 10px 15px;
+                border: 1px solid var(--medium-gray);
+            }
+
+            .form-control:focus,
+            .form-select:focus {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(15, 92, 149, 0.2);
+            }
+
+            .form-label {
+                font-weight: 500;
+                margin-bottom: 8px;
+                color: #555;
+            }
+
+            .translator-card {
+                background-color: white;
+                border-radius: 12px;
+                padding: 25px;
+                margin-bottom: 25px;
+                box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                border: 1px solid #f0f0f0;
+            }
+
+            .translator-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+            }
+
+            .translator-name {
+                font-weight: 700;
+                font-size: 20px;
+                color: var(--primary-dark);
+                margin-bottom: 5px;
+            }
+
+            .translator-exp {
+                color: var(--dark-gray);
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+
+            .rating {
+                color: #FFC107;
+                margin-bottom: 15px;
+            }
+
+            .rating-count {
+                color: var(--dark-gray);
+                font-size: 14px;
+            }
+
+            .languages {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 15px;
+            }
+
+            .language-tag {
+                background-color: rgba(15, 92, 149, 0.1);
+                color: var(--primary-color);
+                padding: 5px 12px;
+                border-radius: 20px;
+                font-size: 13px;
+                font-weight: 500;
+            }
+
+            .translator-description {
+                color: #555;
+                font-size: 14px;
+                line-height: 1.5;
+                margin-bottom: 20px;
+            }
+
+            .translator-price {
+                font-weight: 700;
+                font-size: 22px;
+                color: var(--primary-color);
+                margin-bottom: 5px;
+            }
+
+            .price-label {
+                color: var(--dark-gray);
+                font-size: 13px;
+            }
+
+            .btn-view-profile {
+                background-color: var(--primary-color);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 10px 20px;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                width: 100%;
+            }
+
+            .btn-view-profile:hover {
+                background-color: var(--primary-dark);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(15, 92, 149, 0.3);
+            }
+
+            .results-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+
+            .results-count {
+                font-weight: 600;
+                color: var(--dark-gray);
+            }
+
+            .sort-dropdown {
+                display: flex;
+                align-items: center;
+            }
+
+            .sort-label {
+                margin-right: 10px;
+                color: var(--dark-gray);
+                font-weight: 500;
+            }
+
+            .divider {
+                height: 1px;
+                background-color: var(--medium-gray);
+                margin: 30px 0;
+            }
+
+            .availability-badge {
+                background-color: #28a745;
+                color: white;
+                padding: 3px 10px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 500;
+                margin-left: 10px;
+            }
+
+            .availability-offline {
+                background-color: #dc3545;
+            }
+
+            @media (max-width: 768px) {
+                .results-header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+
+                .sort-dropdown {
+                    margin-top: 15px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="#">Translink</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Find Translators</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Become a Translator</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Resources</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Login</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="page-title">Find Your Translator</h1>
+                    <p class="page-subtitle">Browse our network of professional translators</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="filter-section">
+                        <h5 class="filter-title">Filters</h5>
+
+                        <form action="/find" method="GET">
+
+                            <div class="mb-4">
+                                <label class="form-label">Search</label>
+                                <input type="text" name="name_or_lang_search" class="form-control" placeholder="Name or language..." value="{{ name_or_lang_search if name_or_lang_search else '' }}">
+                                <button type="submit" class="btn btn-primary w-100 mt-3">Search</button>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Price Range ($/hour)</label>
+                                <div class="d-flex align-items-center">
+                                    <span class="me-2">$0</span>
+                                    <input type="range" class="form-range flex-grow-1" min="0" max="100" name="price_max" id="priceRange" value="{{ price_max if price_max else 60 }}">
+                                    <span class="ms-2" id="priceRangeValue">${{ price_max if price_max else 60 }}</span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Minimum Rating</label>
+                                <select class="form-select" name="min_rating">
+                                    <option value="0" {% if min_rating == "0" or min_rating == None %}selected{% endif %}>Any Rating</option>
+                                    <option value="4.5" {% if min_rating == "4.5" %}selected{% endif %}>4.5+ Stars</option>
+                                    <option value="4.0" {% if min_rating == "4.0" %}selected{% endif %}>4.0+ Stars</option>
+                                    <option value="3.5" {% if min_rating == "3.5" %}selected{% endif %}>3.5+ Stars</option>
+                                    <option value="3.0" {% if min_rating == "3.0" %}selected{% endif %}>3.0+ Stars</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Availability</label>
+                                <select class="form-select" name="availability">
+                                    <option value="all" {% if availability == "all" or availability == None %}selected{% endif %}>All Translators</option>
+                                    <option value="available_now" {% if availability == "available_now" %}selected{% endif %}>Available Now</option>
+                                    <option value="available_this_week" {% if availability == "available_this_week" %}selected{% endif %}>Available This Week</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Languages</label>
+                                <select class="form-select" name="language_filter">
+                                    <option value="all" {% if language_filter == "all" or language_filter == None %}selected{% endif %}>All Languages</option>
+                                    <option value="French" {% if language_filter == "French" %}selected{% endif %}>French</option>
+                                    <option value="Spanish" {% if language_filter == "Spanish" %}selected{% endif %}>Spanish</option>
+                                    <option value="German" {% if language_filter == "German" %}selected{% endif %}>German</option>
+                                    <option value="Japanese" {% if language_filter == "Japanese" %}selected{% endif %}>Japanese</option>
+                                    <option value="Arabic" {% if language_filter == "Arabic" %}selected{% endif %}>Arabic</option>
+                                    <option value="Portuguese" {% if language_filter == "Portuguese" %}selected{% endif %}>Portuguese</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Sort by</label>
+                                <select class="form-select" name="sort_by">
+                                    <option value="recommended" {% if sort_by == "recommended" or sort_by == None %}selected{% endif %}>Recommended</option>
+                                    <option value="highest_rated" {% if sort_by == "highest_rated" %}selected{% endif %}>Highest Rated</option>
+                                    <option value="price_asc" {% if sort_by == "price_asc" %}selected{% endif %}>Price: Low to High</option>
+                                    <option value="price_desc" {% if sort_by == "price_desc" %}selected{% endif %}>Price: High to Low</option>
+                                    <option value="most_experience" {% if sort_by == "most_experience" %}selected{% endif %}>Most Experience</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-lg-8">
+                    <div class="results-header">
+                        <div class="results-count">
+                            {{ translators | length }} translator{% if translators | length != 1 %}s{% endif %} found
+                        </div>
+                        <div class="sort-dropdown d-none d-lg-flex">
+                            <span class="sort-label">Sort by:</span>
+                            <select class="form-select form-select-sm" style="width: auto;" disabled>
+                                <option>Recommended</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {% for t in translators %}
+                        <div class="translator-card">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="translator-name">
+                                        {{ t.full_name }}
+                                        <span class="availability-badge {% if t.is_available == 0 %}availability-offline{% endif %}">
+                                            {% if t.is_available == 1 %}Available{% else %}Offline{% endif %}
+                                        </span>
+                                    </div>
+
+                                    <div class="translator-exp">Experience: {{ t.experience }} years</div>
+
+                                    <div class="rating">
+                                        {% set rating_value = (t.rating or 0) %}
+                                        {% set full_stars = rating_value | int %}
+                                        {% set has_half_star = (rating_value * 2) | int % 2 == 1 %}
+
+                                        {% for _ in range(full_stars) %}
+                                            <i class="fas fa-star"></i>
+                                        {% endfor %}
+                                        {% if has_half_star %}
+                                            <i class="fas fa-star-half-alt"></i>
+                                        {% endif %}
+                                        {% for _ in range(5 - full_stars - (1 if has_half_star else 0)) %}
+                                            <i class="far fa-star"></i>
+                                        {% endfor %}
+
+                                        <span class="rating-count">({{ t.rating_count or 0 }} reviews)</span>
+                                    </div>
+
+
+                                    <div class="languages">
+                                        <span class="language-tag">{{ t.language }}</span>
+                                    </div>
+
+                                    <div class="translator-description">{{ t.description }}</div>
+                                </div>
+
+                                <div class="col-md-4 text-md-end">
+                                    <div class="translator-price">${{ "%.2f"|format(t.price_per_hour) }}</div>
+                                    <div class="price-label">per hour</div>
+                                    <button class="btn-view-profile mt-3">View Profile</button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    {% if translators | length == 0 %}
+                        <div class="alert alert-info text-center" role="alert">
+                            No translators found matching your criteria. Try adjusting your filters.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const priceRange = document.getElementById('priceRange');
+            const priceRangeValue = document.getElementById('priceRangeValue');
+            if (priceRange) {
+                priceRange.addEventListener('input', (event) => {
+                    priceRangeValue.textContent = `$${event.target.value}`;
+                });
+            }
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+
+</html>
