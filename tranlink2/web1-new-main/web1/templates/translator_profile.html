@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ translator.full_name }} - Profile | Translink</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0F5C95;
+            --primary-dark: #094066;
+            --accent-color: #FFC107;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .profile-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .profile-header h1 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-top: -3rem;
+        }
+
+        .profile-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-book {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+        }
+
+        .btn-book:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .language-tag {
+            background-color: rgba(15,92,149,0.1);
+            color: var(--primary-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-right: 8px;
+        }
+
+        .rating {
+            color: #FFC107;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-header">
+        <div class="container">
+            <h1>{{ translator.full_name }}</h1>
+            <p>{{ translator.language }} Translator</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-section">
+                <h4 class="mb-3">About</h4>
+                <p>{{ translator.description }}</p>
+            </div>
+
+            <div class="profile-section">
+                <h4 class="mb-3">Languages</h4>
+                <span class="language-tag">{{ translator.language }}</span>
+            </div>
+
+            <div class="profile-section">
+                <h4 class="mb-3">Experience & Rating</h4>
+                <p><strong>Experience:</strong> {{ translator.experience }} years</p>
+                <div class="rating mb-2">
+                    {% set rating_value = (translator.rating or 0) %}
+                    {% set full_stars = rating_value | int %}
+                    {% set has_half_star = (rating_value * 2) | int % 2 == 1 %}
+
+                    {% for _ in range(full_stars) %}
+                        <i class="fas fa-star"></i>
+                    {% endfor %}
+                    {% if has_half_star %}
+                        <i class="fas fa-star-half-alt"></i>
+                    {% endif %}
+                    {% for _ in range(5 - full_stars - (1 if has_half_star else 0)) %}
+                        <i class="far fa-star"></i>
+                    {% endfor %}
+                    <span class="text-muted">({{ translator.rating_count or 0 }} reviews)</span>
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <h4 class="mb-3">Rate</h4>
+                <p><strong>${{ "%.2f"|format(translator.price_per_hour) }}</strong> per hour</p>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="/book/{{ translator.id }}" class="btn btn-book">
+                    <i class="fas fa-calendar-plus me-2"></i>Book a Session
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

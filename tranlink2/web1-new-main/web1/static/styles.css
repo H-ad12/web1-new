@@ -1,0 +1,9 @@
+.hero-img {
+  width: 100%;           /* or 100% if you want full width */
+  max-width: 9000px;
+  height: auto;         /* keeps the original proportions */
+  display: block;
+  margin: 20px auto;
+  border-radius: 10px;
+  object-fit: contain;  /* 👈 prevents cropping */
+}
