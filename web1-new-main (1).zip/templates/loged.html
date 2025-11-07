@@ -1,0 +1,505 @@
+{% extends "layout.html" %}
+{% block main %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Translink</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0F5C95;
+            --primary-dark: #094066;
+            --accent-color: #FFC107;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: white !important;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-text {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-label {
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid var(--medium-gray);
+            font-weight: 600;
+            color: var(--primary-dark);
+            padding: 1rem 1.5rem;
+            border-radius: 10px 10px 0 0 !important;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(15, 92, 149, 0.3);
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 8px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .quick-action {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+            border-top: 4px solid var(--accent-color);
+        }
+
+        .quick-action:hover {
+            transform: translateY(-5px);
+        }
+
+        .action-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .appointment-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--medium-gray);
+            transition: background-color 0.2s ease;
+        }
+
+        .appointment-item:hover {
+            background-color: var(--light-gray);
+        }
+
+        .appointment-item:last-child {
+            border-bottom: none;
+        }
+
+        .translator-name {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .appointment-date {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-confirmed {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-pending {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning-color);
+        }
+
+        .status-completed {
+            background-color: rgba(108, 117, 125, 0.1);
+            color: #6c757d;
+        }
+
+        .language-tag {
+            background-color: rgba(15, 92, 149, 0.1);
+            color: var(--primary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .recent-translator {
+            padding: 1rem;
+            border-bottom: 1px solid var(--medium-gray);
+            transition: background-color 0.2s ease;
+        }
+
+        .recent-translator:hover {
+            background-color: var(--light-gray);
+        }
+
+        .recent-translator:last-child {
+            border-bottom: none;
+        }
+
+        .translator-rating {
+            color: #FFC107;
+            margin-bottom: 0.5rem;
+        }
+
+        .translator-price {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .search-box {
+            border-radius: 20px;
+            padding-left: 2.5rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
+        <div class="container">
+            <a class="navbar-brand" href="/loged">
+                <i class="fas fa-language me-2"></i>Translink
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarToggler">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/loged">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/find">Find Translators</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/history">My History</a>
+                    </li>
+                </ul>
+
+                <form class="d-flex position-relative me-3">
+                    <i class="fas fa-search search-icon"></i>
+                    <input class="form-control search-box" type="search" placeholder="Search translators, languages...">
+                </form>
+
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="/account" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> My Account
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="/settings"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Log out</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="container">
+            <h1 class="welcome-text">Welcome back!</h1>
+            <p class="welcome-subtitle">Here's what's happening with your translation requests</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Stats Overview -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number">5</div>
+                    <div class="stats-label">Upcoming Appointments</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number">12</div>
+                    <div class="stats-label">Completed Translations</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number">3</div>
+                    <div class="stats-label">Favorite Translators</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number">$240</div>
+                    <div class="stats-label">Total Spent</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Left Column -->
+            <div class="col-lg-8">
+                <!-- Quick Actions -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="quick-action">
+                            <div class="action-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h5>Find a Translator</h5>
+                            <p class="text-muted mb-3">Find professional translators for your needs</p>
+                            <a href="/find" class="btn btn-primary">Browse Translators</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="quick-action">
+                            <div class="action-icon">
+                                <i class="fas fa-history"></i>
+                            </div>
+                            <h5>View History</h5>
+                            <p class="text-muted mb-3">Check your past translations</p>
+                            <a href="/history" class="btn btn-primary">View History</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Appointments -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Upcoming Appointments</span>
+                        <a href="/appointments" class="btn btn-outline-primary btn-sm">View All</a>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="appointment-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="translator-name">Maria Garcia</div>
+                                    <div class="appointment-date">Tomorrow, 10:00 AM - Medical Consultation</div>
+                                    <div class="mt-2">
+                                        <span class="language-tag">Spanish</span>
+                                        <span class="language-tag">English</span>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <span class="status-badge status-confirmed">Confirmed</span>
+                                    <div class="mt-2">
+                                        <button class="btn btn-outline-primary btn-sm">Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="appointment-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="translator-name">Hans Müller</div>
+                                    <div class="appointment-date">Oct 25, 2:30 PM - Business Meeting</div>
+                                    <div class="mt-2">
+                                        <span class="language-tag">German</span>
+                                        <span class="language-tag">English</span>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <span class="status-badge status-pending">Pending</span>
+                                    <div class="mt-2">
+                                        <button class="btn btn-outline-primary btn-sm">Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="appointment-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="translator-name">Yuki Tanaka</div>
+                                    <div class="appointment-date">Nov 2, 9:00 AM - Academic Conference</div>
+                                    <div class="mt-2">
+                                        <span class="language-tag">Japanese</span>
+                                        <span class="language-tag">English</span>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <span class="status-badge status-confirmed">Confirmed</span>
+                                    <div class="mt-2">
+                                        <button class="btn btn-outline-primary btn-sm">Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-lg-4">
+                <!-- Recent Translators -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Recent Translators</span>
+                        <a href="/find" class="btn btn-outline-primary btn-sm">Find More</a>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="recent-translator">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div class="translator-name">Jen Dupont</div>
+                                <div class="translator-price">$55/hr</div>
+                            </div>
+                            <div class="translator-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="text-muted ms-1">4.9 (93)</span>
+                            </div>
+                            <div class="mb-2">
+                                <span class="language-tag">French</span>
+                                <span class="language-tag">English</span>
+                                <span class="language-tag">Spanish</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm w-100">Book Again</button>
+                        </div>
+
+                        <div class="recent-translator">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div class="translator-name">Ahmed Hassan</div>
+                                <div class="translator-price">$52/hr</div>
+                            </div>
+                            <div class="translator-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span class="text-muted ms-1">4.5 (88)</span>
+                            </div>
+                            <div class="mb-2">
+                                <span class="language-tag">Arabic</span>
+                                <span class="language-tag">English</span>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm w-100">Book Again</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Support -->
+                <div class="card">
+                    <div class="card-header">
+                        <span>Need Help?</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Our support team is here to help you with any questions about your translations.</p>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-primary">
+                                <i class="fas fa-comment-dots me-2"></i>Contact Support
+                            </button>
+                            <button class="btn btn-outline-primary">
+                                <i class="fas fa-question-circle me-2"></i>FAQs
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+{% endblock %}
