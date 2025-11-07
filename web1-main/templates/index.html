@@ -1,0 +1,668 @@
+{% extends "layout.html" %}
+
+{% block main %}
+  <title>Translink - Professional Translation Services</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #0F5C95;
+      --primary-dark: #094066;
+      --accent-color: #FFC107;
+      --light-bg: #f8f9fa;
+    }
+
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #ffffff;
+    }
+
+    .navbar {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+      font-weight: 800;
+      font-size: 1.8rem;
+      color: white !important;
+      letter-spacing: 0.5px;
+    }
+
+    .hero-section {
+      background: linear-gradient(rgba(15, 92, 149, 0.85), rgba(9, 64, 102, 0.9)), url("{{ url_for('static', filename='images/city-night.png') }}");
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 5rem 0;
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn-hero {
+      background-color: var(--accent-color);
+      color: #333;
+      border: none;
+      padding: 0.9rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-hero:hover {
+      background-color: #e0a800;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .section-title {
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background-color: var(--accent-color);
+      border-radius: 2px;
+    }
+
+    .about-section {
+      padding: 5rem 0;
+    }
+
+    .about-text {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #555;
+    }
+
+    .features-section {
+      background-color: var(--light-bg);
+      padding: 5rem 0;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      height: 100%;
+      transition: transform 0.3s ease;
+      border-top: 4px solid var(--primary-color);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-title {
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 1rem;
+    }
+
+    .feature-text {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .carousel-section {
+      padding: 5rem 0;
+    }
+
+    .carousel-item {
+      height: 500px;
+    }
+
+    .carousel-img {
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.8);
+    }
+
+    .carousel-caption {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 2rem;
+      border-radius: 10px;
+      bottom: 20%;
+      left: 10%;
+      right: 10%;
+    }
+
+    .carousel-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .carousel-text {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .services-section {
+      padding: 5rem 0;
+    }
+
+    .service-card {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
+      height: 100%;
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .service-img {
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .service-body {
+      padding: 1.5rem;
+    }
+
+    .service-title {
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 1rem;
+    }
+
+    .service-text {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-service {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 5px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-service:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .stats-section {
+      background: linear-gradient(rgba(15, 92, 149, 0.9), rgba(9, 64, 102, 0.9)), url("{{ url_for('static', filename='images/network.jpg') }}");
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 5rem 0;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
+    .testimonials-section {
+      padding: 5rem 0;
+      background-color: var(--light-bg);
+    }
+
+    .testimonial-card {
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      height: 100%;
+    }
+
+    .testimonial-text {
+      font-style: italic;
+      line-height: 1.7;
+      color: #555;
+      margin-bottom: 1.5rem;
+    }
+
+    .testimonial-author {
+      font-weight: 600;
+      color: var(--primary-dark);
+    }
+
+    .testimonial-role {
+      color: #777;
+      font-size: 0.9rem;
+    }
+
+    .cta-section {
+      padding: 5rem 0;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-text {
+      font-size: 1.2rem;
+      color: #555;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+    }
+
+    .btn-cta {
+      background-color: var(--accent-color);
+      color: #333;
+      border: none;
+      padding: 1rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-cta:hover {
+      background-color: #e0a800;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    footer {
+      background-color: var(--primary-dark);
+      color: white;
+      padding: 3rem 0 1.5rem;
+    }
+
+    .footer-title {
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.7rem;
+    }
+
+    .footer-links a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    .copyright {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 1.5rem;
+      margin-top: 2rem;
+      text-align: center;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <i class="fas fa-language me-2"></i>Translink
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarToggler">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/find">Find Translators</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/services">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About Us</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Log in</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-outline-light" href="/register">Register</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <h1 class="hero-title">Breaking Language Barriers Worldwide</h1>
+      <p class="hero-subtitle">Translink connects you with professional translators for in-person interpretation services anywhere, anytime. Experience seamless communication across languages and cultures.</p>
+      <a href="/translators" class="btn btn-hero">Find a Translator Now</a>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h2 class="section-title">What is Translink?</h2>
+          <p class="about-text">
+            Translink is a revolutionary platform that redefines how individuals and businesses access professional translation services. We connect you with certified, experienced translators for in-person interpretation anywhere in the world.
+          </p>
+          <p class="about-text">
+            Whether you need assistance with business negotiations, medical appointments, legal proceedings, or academic conferences, our network of vetted professionals ensures accurate, culturally-sensitive communication.
+          </p>
+          <p class="about-text">
+            Our mission is to break down language barriers and foster understanding in an increasingly connected world. With Translink, quality translation services are just a click away.
+          </p>
+        </div>
+        <div class="col-lg-6">
+          <div class="card border-0">
+            <img src="{{ url_for('static', filename='images/translation-team.jpg') }}" alt="Translation Team" class="card-img-top rounded">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="container">
+      <h2 class="section-title text-center mb-5">Why Choose Translink?</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-user-check"></i>
+            </div>
+            <h3 class="feature-title">Vetted Professionals</h3>
+            <p class="feature-text">All our translators undergo rigorous screening, certification verification, and background checks to ensure the highest quality service.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-globe-americas"></i>
+            </div>
+            <h3 class="feature-title">Global Network</h3>
+            <p class="feature-text">Access translators in over 100 countries and 200+ languages. Wherever you are, we have local language experts ready to assist.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <h3 class="feature-title">Quick Matching</h3>
+            <p class="feature-text">Our intelligent matching system connects you with the perfect translator for your specific needs in minutes, not days.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Carousel -->
+  <section class="carousel-section">
+    <div class="container">
+      <h2 class="section-title text-center mb-5">Our Translation Specializations</h2>
+      <div id="servicesCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#servicesCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#servicesCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#servicesCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner rounded">
+          <div class="carousel-item active">
+            <img src="{{ url_for('static', filename='images/Medical-interpreter.jpg') }}" class="d-block w-100 carousel-img" alt="Medical Translation">
+            <div class="carousel-caption">
+              <h3 class="carousel-title">Medical Translation</h3>
+              <p class="carousel-text">Accurate interpretation for medical appointments, procedures, and consultations. Our medical translators have specialized knowledge of terminology and protocols.</p>
+              <a href="/services/medical" class="btn btn-service">Learn More</a>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="{{ url_for('static', filename='images/acadmic.jpg') }}" class="d-block w-100 carousel-img" alt="Academic Translation">
+            <div class="carousel-caption">
+              <h3 class="carousel-title">Academic Translation</h3>
+              <p class="carousel-text">Support for international students, researchers, and academic conferences. Specialized in educational terminology and academic contexts.</p>
+              <a href="/services/academic" class="btn btn-service">Learn More</a>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="{{ url_for('static', filename='images/business.jpg') }}" class="d-block w-100 carousel-img" alt="Business Translation">
+            <div class="carousel-caption">
+              <h3 class="carousel-title">Business Translation</h3>
+              <p class="carousel-text">Professional interpretation for negotiations, meetings, and corporate events. Expertise in business terminology and cultural nuances.</p>
+              <a href="/services/business" class="btn btn-service">Learn More</a>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#servicesCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#servicesCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-md-3 col-6 mb-4">
+          <div class="stat-number">5,000+</div>
+          <div class="stat-label">Professional Translators</div>
+        </div>
+        <div class="col-md-3 col-6 mb-4">
+          <div class="stat-number">120+</div>
+          <div class="stat-label">Countries Served</div>
+        </div>
+        <div class="col-md-3 col-6 mb-4">
+          <div class="stat-number">200+</div>
+          <div class="stat-label">Languages Available</div>
+        </div>
+        <div class="col-md-3 col-6 mb-4">
+          <div class="stat-number">50,000+</div>
+          <div class="stat-label">Successful Translations</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="services-section">
+    <div class="container">
+      <h2 class="section-title text-center mb-5">Our Services</h2>
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+          <div class="service-card">
+            <img src="{{ url_for('static', filename='images/legal-translation.jpg') }}" class="service-img" alt="Legal Translation">
+            <div class="service-body">
+              <h3 class="service-title">Legal Translation</h3>
+              <p class="service-text">Certified translators for court proceedings, legal documents, and attorney-client meetings. Expertise in legal terminology and procedures.</p>
+              <a href="/services/legal" class="btn btn-service">Find Legal Translators</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="service-card">
+            <img src="{{ url_for('static', filename='images/technical-translation.jpg') }}" class="service-img" alt="Technical Translation">
+            <div class="service-body">
+              <h3 class="service-title">Technical Translation</h3>
+              <p class="service-text">Specialized interpreters for engineering, IT, and scientific fields. Accurate technical terminology and concept translation.</p>
+              <a href="/services/technical" class="btn btn-service">Find Technical Translators</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+          <div class="service-card">
+            <img src="{{ url_for('static', filename='images/travel-translation.jpg') }}" class="service-img" alt="Travel Translation">
+            <div class="service-body">
+              <h3 class="service-title">Travel & Tourism</h3>
+              <p class="service-text">Interpretation services for travelers, tour guides, and hospitality. Cultural mediation and local context expertise.</p>
+              <a href="/services/travel" class="btn btn-service">Find Travel Translators</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials-section">
+    <div class="container">
+      <h2 class="section-title text-center mb-5">What Our Clients Say</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="testimonial-card">
+            <p class="testimonial-text">"Translink saved our international business deal. The translator was not only fluent but also understood the cultural nuances that made all the difference in our negotiations."</p>
+            <div class="testimonial-author">Robert Chen</div>
+            <div class="testimonial-role">CEO, Global Ventures Inc.</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="testimonial-card">
+            <p class="testimonial-text">"As an international student, having a translator for my university interviews was invaluable. The service was professional, punctual, and affordable."</p>
+            <div class="testimonial-author">Sophie Martinez</div>
+            <div class="testimonial-role">Graduate Student</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="testimonial-card">
+            <p class="testimonial-text">"The medical translator helped my mother understand her treatment options clearly. It reduced our anxiety and ensured she could make informed decisions about her health."</p>
+            <div class="testimonial-author">David Kim</div>
+            <div class="testimonial-role">Family Member</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <h2 class="cta-title">Ready to Break Language Barriers?</h2>
+      <p class="cta-text">Join thousands of satisfied clients who have experienced seamless communication with our professional translation services.</p>
+      <a href="/register" class="btn btn-cta">Get Started Today</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 mb-4">
+          <h3 class="footer-title">
+            <i class="fas fa-language me-2"></i>Translink
+          </h3>
+          <p>Breaking language barriers worldwide with professional, in-person translation services.</p>
+          <div class="mt-3">
+            <a href="#" class="text-light me-3"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="text-light me-3"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-light me-3"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="text-light"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-6 mb-4">
+          <h3 class="footer-title">Services</h3>
+          <ul class="footer-links">
+            <li><a href="#">Medical Translation</a></li>
+            <li><a href="#">Legal Translation</a></li>
+            <li><a href="#">Business Translation</a></li>
+            <li><a href="#">Academic Translation</a></li>
+            <li><a href="#">Technical Translation</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-2 col-md-6 mb-4">
+          <h3 class="footer-title">Company</h3>
+          <ul class="footer-links">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">How It Works</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-2 col-md-6 mb-4">
+          <h3 class="footer-title">Support</h3>
+          <ul class="footer-links">
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Translator Resources</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-2 col-md-6 mb-4">
+          <h3 class="footer-title">Legal</h3>
+          <ul class="footer-links">
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">Disclaimer</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2023 Translink. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+{% endblock %}
